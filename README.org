@@ -1,2 +1,6 @@
-* Presentations in org reveal
-  http://nwidger.github.io/blog/post/making-a-reveal.js-presentation-with-org-reveal/
+This repository contains several notebooks teaching how to use some
+python tools for Numerical Calculus in Engineering. 
+
+* Tools
+** Presentations in org reveal
+    http://nwidger.github.io/blog/post/making-a-reveal.js-presentation-with-org-reveal/
