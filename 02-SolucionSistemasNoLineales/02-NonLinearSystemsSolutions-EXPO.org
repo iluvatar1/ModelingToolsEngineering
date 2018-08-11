@@ -298,6 +298,12 @@ print(sol)
    Plot the critical mass as a function of the coefficient $c_d \in
    {0.1, 0.15, 0.2, 0.25, 0.3, \ldots, 0.9}$, such us the speed is $v
    = 36$ m/s after $t = 4$ s.
+   
+   Remember that 
+   $$
+   f(m) = \sqrt{\frac{gm}{c_d}} \tanh \left( {\sqrt{\frac{gc_d}{m}}t}
+   \right) - v(t).
+   $$
 
 ** Intersection on 3D objects (System of equations)
    /Ref: Kiusalaas, Numerical Methods in Engineering with Python 3,

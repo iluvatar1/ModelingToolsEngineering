@@ -35,11 +35,11 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#/slide-org9389415">Introduction to root finding</a></li>
-<li><a href="#/slide-org399573f">Bracketing methods</a></li>
-<li><a href="#/slide-orgd6f15bf">Open Methods</a></li>
-<li><a href="#/slide-org6eecb41">Using <code>Scipy</code> for one- and multi-dimensional equations</a></li>
-<li><a href="#/slide-org70542b9">Exercises</a></li>
+<li><a href="#/slide-org9d841b4">Introduction to root finding</a></li>
+<li><a href="#/slide-orgd692414">Bracketing methods</a></li>
+<li><a href="#/slide-orgf171c32">Open Methods</a></li>
+<li><a href="#/slide-org230c557">Using <code>Scipy</code> for one- and multi-dimensional equations</a></li>
+<li><a href="#/slide-org929b869">Exercises</a></li>
 </ul>
 </div>
 </div>
@@ -47,8 +47,8 @@
 
 
 <section>
-<section id="slide-org9389415">
-<h2 id="org9389415">Introduction to root finding</h2>
+<section id="slide-org9d841b4">
+<h2 id="org9d841b4">Introduction to root finding</h2>
 
 <div class="figure">
 <p><img src="images/roots.png" alt="roots.png" />
@@ -57,8 +57,8 @@
 </section>
 </section>
 <section>
-<section id="slide-org6fb63d9">
-<h3 id="org6fb63d9">A problem example : Bunge jumping  (From Chapra 2012)</h3>
+<section id="slide-orgf057f51">
+<h3 id="orgf057f51">A problem example : Bunge jumping  (From Chapra 2012)</h3>
 <p>
 The velocity for a jumper is given as 
 \[
@@ -81,8 +81,8 @@ Now your problem is to find the root of the function \(f(m)\)
 </section>
 </section>
 <section>
-<section id="slide-orga6acd58">
-<h3 id="orga6acd58">Graphical method</h3>
+<section id="slide-org4d0a2f3">
+<h3 id="org4d0a2f3">Graphical method</h3>
 <p>
 The first approach is to plot the function \(f(m)\) and find the root
 graphically. The following snippet shows you how to do that
@@ -127,8 +127,8 @@ fig.savefig(<span style="color: #CC9393;">"images/fm.png"</span>, dpi=300, bbox_
 </section>
 </section>
 <section>
-<section id="slide-orgd6bc6a9">
-<h3 id="orgd6bc6a9">Exercise</h3>
+<section id="slide-orge4fff14">
+<h3 id="orge4fff14">Exercise</h3>
 <p>
 Plot the function on your computer and find the value
 for the mass. How much is \(f(m)\) for that value?
@@ -141,8 +141,8 @@ Do you think this graphical approach is useful?
 </section>
 </section>
 <section>
-<section id="slide-org399573f">
-<h2 id="org399573f">Bracketing methods</h2>
+<section id="slide-orgd692414">
+<h2 id="orgd692414">Bracketing methods</h2>
 <div class="column"  style="float:left; width: 70%">
 <p>
 <p>
@@ -174,8 +174,8 @@ included.</li>
 </section>
 </section>
 <section>
-<section id="slide-orgbe06a87">
-<h3 id="orgbe06a87">Bisection</h3>
+<section id="slide-org68dd05e">
+<h3 id="org68dd05e">Bisection</h3>
 
 <div class="figure">
 <p><img src="images/bisect-example.png" alt="bisect-example.png" />
@@ -193,8 +193,8 @@ the interval is very small.
 </section>
 </section>
 <section>
-<section id="slide-org612d144">
-<h4 id="org612d144">Pseudo-code</h4>
+<section id="slide-org9ecf0d2">
+<h4 id="org9ecf0d2">Pseudo-code</h4>
 <ol>
 <li class="fragment roll-in">Define a given precision \(\epsilon\) and a maximum number of
 iterations \(N\).</li>
@@ -209,8 +209,8 @@ to point 3 until the maximum number of iterations.</li>
 </section>
 </section>
 <section>
-<section id="slide-org6ad909b">
-<h4 id="org6ad909b">Graphical description of the bisection method \(x_r = \frac{x_l + x_u}{2}\)</h4>
+<section id="slide-org1c202a2">
+<h4 id="org1c202a2">Graphical description of the bisection method \(x_r = \frac{x_l + x_u}{2}\)</h4>
 
 <div class="figure">
 <p><img src="images/graphical-bisection.png" alt="graphical-bisection.png" />
@@ -219,8 +219,8 @@ to point 3 until the maximum number of iterations.</li>
 </section>
 </section>
 <section>
-<section id="slide-orgad90dda">
-<h3 id="orgad90dda">Exercise</h3>
+<section id="slide-org985cfaf">
+<h3 id="org985cfaf">Exercise</h3>
 <p>
 Implement the bisection method and solve the original problem for
 the mass. 
@@ -229,8 +229,8 @@ the mass.
 </section>
 </section>
 <section>
-<section id="slide-orgee4f8e6">
-<h3 id="orgee4f8e6">False Position</h3>
+<section id="slide-orgf46ee20">
+<h3 id="orgf46ee20">False Position</h3>
 
 <div class="figure">
 <p><img src="images/false-position-basic.png" alt="false-position-basic.png" />
@@ -240,8 +240,8 @@ the mass.
 </section>
 </section>
 <section>
-<section id="slide-org4a21250">
-<h4 id="org4a21250">New definition for \(\ x_r\)</h4>
+<section id="slide-orgbe7f29c">
+<h4 id="orgbe7f29c">New definition for \(\ x_r\)</h4>
 <p>
 \[
    x_r = x_u - \frac{f(x_u)(x_l - x_u)}{f(x_l) - f(x_u)}.
@@ -250,8 +250,8 @@ the mass.
 </section>
 </section>
 <section>
-<section id="slide-orgf34372c">
-<h3 id="orgf34372c">Exercise</h3>
+<section id="slide-org412f5d7">
+<h3 id="org412f5d7">Exercise</h3>
 <p>
 Implement the false position method by adapting the bisection
 method (basically just change the computation of \(x_r\)). Compare
@@ -260,8 +260,8 @@ with bisection to find the root of the mass function.
 </section>
 </section>
 <section>
-<section id="slide-org88ede8b">
-<h3 id="org88ede8b">Exercise</h3>
+<section id="slide-org82b4e96">
+<h3 id="org82b4e96">Exercise</h3>
 <p>
 Determine the positive real root of \(\ln(x^2) = 0.7\), (a)
 graphically, (b) using three iterations of the bisection method,
@@ -272,8 +272,8 @@ initial guesses as in (b).
 </section>
 </section>
 <section>
-<section id="slide-orgd6f15bf">
-<h2 id="orgd6f15bf">Open Methods</h2>
+<section id="slide-orgf171c32">
+<h2 id="orgf171c32">Open Methods</h2>
 <p class="fragment (t)">
 These methods require only a single starting point or two starting
 points that do not necessarily include the root. 
@@ -286,8 +286,8 @@ than a bracketing method.
 </section>
 </section>
 <section>
-<section id="slide-org035ace2">
-<h3 id="org035ace2">Fixed point iteration</h3>
+<section id="slide-orgb00d3d9">
+<h3 id="orgb00d3d9">Fixed point iteration</h3>
 <p>
 The original problem \(f(x) == 0\) is transformed into 
 \[
@@ -303,8 +303,8 @@ iterate as
 </section>
 </section>
 <section>
-<section id="slide-org1000200">
-<h3 id="org1000200">Exercise</h3>
+<section id="slide-org660b9be">
+<h3 id="org660b9be">Exercise</h3>
 <p>
 For the function \(f(x) = e^{-x} - x\) use the iteration method
 (either manually or by using a program), starting from \(x_0 = 0.0\)
@@ -356,8 +356,8 @@ and performing 11 iterations. Fill/print the following data
 </section>
 </section>
 <section>
-<section id="slide-org4f2db0f">
-<h3 id="org4f2db0f">Exercise</h3>
+<section id="slide-orgc7fbcb0">
+<h3 id="orgc7fbcb0">Exercise</h3>
 <p>
 Compute the root of the mass function using the fixed-point method.
 </p>
@@ -365,8 +365,8 @@ Compute the root of the mass function using the fixed-point method.
 </section>
 </section>
 <section>
-<section id="slide-org89e4c0f">
-<h3 id="org89e4c0f">Newton-Raphson</h3>
+<section id="slide-org62bbd6a">
+<h3 id="org62bbd6a">Newton-Raphson</h3>
 <p>
 The Newton-Rapshon methods are a huge family of very powerful
 methods employing for both scalar and vectorial non-linear
@@ -396,8 +396,8 @@ As you can see, this is also an <b>iterative method</b>.
 </section>
 </section>
 <section>
-<section id="slide-org87d5615">
-<h3 id="org87d5615">Exercise</h3>
+<section id="slide-orgb73ca74">
+<h3 id="orgb73ca74">Exercise</h3>
 <p>
 Implement the Newton-Raphson method to find the root of the mass
 function and for the function \(e^{-x} - x\). 
@@ -406,8 +406,8 @@ function and for the function \(e^{-x} - x\).
 </section>
 </section>
 <section>
-<section id="slide-orga3b1f27">
-<h3 id="orga3b1f27">Other methods:</h3>
+<section id="slide-orgb0dabb1">
+<h3 id="orgb0dabb1">Other methods:</h3>
 <p>
 There are other methods, much more elaborated, like the secant
 method, Brent's method, Higher order Newton-Raphson formulas,
@@ -418,8 +418,8 @@ better to use the scientific python library.
 </section>
 </section>
 <section>
-<section id="slide-org6eecb41">
-<h2 id="org6eecb41">Using <code>Scipy</code> for one- and multi-dimensional equations</h2>
+<section id="slide-org230c557">
+<h2 id="org230c557">Using <code>Scipy</code> for one- and multi-dimensional equations</h2>
 <p>
 <code>Scipy</code> offers you the <code>root</code> method to compute the root for a
 (system) of equations very efficiently. Please go and red the doc at
@@ -430,8 +430,8 @@ equations.
 </section>
 </section>
 <section>
-<section id="slide-org264fd21">
-<h3 id="org264fd21">Scalar equation</h3>
+<section id="slide-orgbe5b8c6">
+<h3 id="orgbe5b8c6">Scalar equation</h3>
 <p>
 The following snippet solves the previous example using the <code>root</code>
 method:
@@ -469,8 +469,8 @@ method:
 </section>
 </section>
 <section>
-<section id="slide-org9dc4b59">
-<h3 id="org9dc4b59">Multidimensional equation (you can also use <code>fsolve</code>)</h3>
+<section id="slide-orgecf7aea">
+<h3 id="orgecf7aea">Multidimensional equation (you can also use <code>fsolve</code>)</h3>
 <div class="org-src-container">
 
 <pre  class="src src-python"><span style="color: #F0DFAF; font-weight: bold;">from</span> scipy <span style="color: #F0DFAF; font-weight: bold;">import</span> optimize
@@ -506,15 +506,15 @@ method:
 </section>
 </section>
 <section>
-<section id="slide-org70542b9">
-<h2 id="org70542b9">Exercises</h2>
-<div class="outline-text-2" id="text-org70542b9">
+<section id="slide-org929b869">
+<h2 id="org929b869">Exercises</h2>
+<div class="outline-text-2" id="text-org929b869">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-orgfbe9863">
-<h3 id="orgfbe9863">Scalar functions</h3>
+<section id="slide-org1b87378">
+<h3 id="org1b87378">Scalar functions</h3>
 <p>
 Compute the root for the following scalar functions:
 </p>
@@ -526,19 +526,27 @@ Compute the root for the following scalar functions:
 </section>
 </section>
 <section>
-<section id="slide-org3b2e80c">
-<h3 id="org3b2e80c">The bungee jumping again</h3>
+<section id="slide-orgba3c5cc">
+<h3 id="orgba3c5cc">The bungee jumping again</h3>
 <p>
 Plot the critical mass as a function of the coefficient \(c_d \in
    {0.1, 0.15, 0.2, 0.25, 0.3, \ldots, 0.9}\), such us the speed is \(v
    = 36\) m/s after \(t = 4\) s.
 </p>
 
+<p>
+Remember that 
+\[
+   f(m) = \sqrt{\frac{gm}{c_d}} \tanh \left( {\sqrt{\frac{gc_d}{m}}t}
+   \right) - v(t).
+   \]
+</p>
+
 </section>
 </section>
 <section>
-<section id="slide-orgc5a4bab">
-<h3 id="orgc5a4bab">Intersection on 3D objects (System of equations)</h3>
+<section id="slide-orgceac069">
+<h3 id="orgceac069">Intersection on 3D objects (System of equations)</h3>
 <p>
 <i>Ref: Kiusalaas, Numerical Methods in Engineering with Python 3,
 Example 4.8</i>
@@ -553,8 +561,8 @@ The solutions are \(\pm(0.618, 1.618)\times 10^{-3}\) and \(\pm(1.618,
 </section>
 </section>
 <section>
-<section id="slide-orgc34a571">
-<h3 id="orgc34a571">System of non-linear equations</h3>
+<section id="slide-orgf527cdf">
+<h3 id="orgf527cdf">System of non-linear equations</h3>
 <p>
 <i>Ref: Kiusalaas, Numerical Methods in Engineering with Python 3,
 Example 4.9</i>
@@ -574,8 +582,8 @@ The solution is  \([0.59905376 , 2.3959314 , 2.00501484]\)
 </section>
 </section>
 <section>
-<section id="slide-org76e6ca4">
-<h3 id="org76e6ca4">Circle from points</h3>
+<section id="slide-org4c1ef8e">
+<h3 id="org4c1ef8e">Circle from points</h3>
 <p>
 <i>Ref: Kiusalaas, Numerical Methods in Engineering with Python 3,
 Exercise 4-26</i> 
@@ -618,8 +626,8 @@ determine \(R, a, b\)
 </section>
 </section>
 <section>
-<section id="slide-orgbf1c493">
-<h3 id="orgbf1c493">Multi-function, plot</h3>
+<section id="slide-orgdbe5d7c">
+<h3 id="orgdbe5d7c">Multi-function, plot</h3>
 <p>
 Solve the system 
 \[y-x^3 -2x^22 +1=0\] 
@@ -630,8 +638,8 @@ roots.
 </section>
 </section>
 <section>
-<section id="slide-org60a32c6">
-<h3 id="org60a32c6">Continuous covering location model - (Prof. William Guerrero)</h3>
+<section id="slide-orgc4d12d6">
+<h3 id="orgc4d12d6">Continuous covering location model - (Prof. William Guerrero)</h3>
 <ul>
 <li>Encontrar las coordenadas \((x,y)\) de los centros de atención a
 clientes.</li>
@@ -646,14 +654,14 @@ distancia real (debe ser positiva)</li>
 
 </ul>
 <p>
-\[\sqrt{(x_j - a_i)^2 -  (y_j-b_i)^2} = R - h_{ij}\], \(\forall j, \forall i\).
+\[\sqrt{(x_j - a_i)^2 -  (y_j-b_i)^2} = R - h_{ij}, \forall j, \forall i\].
 </p>
 
 </section>
 </section>
 <section>
-<section id="slide-org8698117">
-<h3 id="org8698117">Multi-dimensional system</h3>
+<section id="slide-org2c879b9">
+<h3 id="org2c879b9">Multi-dimensional system</h3>
 <p>
 <i>E. Ward, Numerical Methods, Exercise 3-21</i>
 Consider the nonlinear system
@@ -668,8 +676,8 @@ identify graphically the solution points.
 </section>
 </section>
 <section>
-<section id="slide-orgf066a19">
-<h3 id="orgf066a19">Rocket</h3>
+<section id="slide-orgcda42ab">
+<h3 id="orgcda42ab">Rocket</h3>
 <p>
 The upward velocity of a rocket can be computed by the following
 formula: \(v = u \ln m_0 − gt m_0 −qt\) where \(v =\) upward velocity,
