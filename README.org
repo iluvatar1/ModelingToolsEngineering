@@ -1,0 +1,2 @@
+* Presentations in org reveal
+  http://nwidger.github.io/blog/post/making-a-reveal.js-presentation-with-org-reveal/
