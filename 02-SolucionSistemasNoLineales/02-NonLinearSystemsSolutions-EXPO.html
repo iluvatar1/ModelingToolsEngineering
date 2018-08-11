@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Solution of non-linear equations</title>
+<meta name="author" content="(William Oquendo)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
+
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/solarized.css" id="theme"/>
+
+<link rel="stylesheet" href="./presentation.css"/>
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'http://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">Solution of non-linear equations</h1><h2 class="author">William Oquendo</h2><h2 class="email"><a href="mailto:woquendo@gmail.com">woquendo@gmail.com</a></h2>
+</section>
+<section id="table-of-contents">
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#/slide-org9389415">Introduction to root finding</a></li>
+<li><a href="#/slide-org399573f">Bracketing methods</a></li>
+<li><a href="#/slide-orgd6f15bf">Open Methods</a></li>
+<li><a href="#/slide-org6eecb41">Using <code>Scipy</code> for one- and multi-dimensional equations</a></li>
+<li><a href="#/slide-org70542b9">Exercises</a></li>
+</ul>
+</div>
+</div>
+</section>
+
+
+<section>
+<section id="slide-org9389415">
+<h2 id="org9389415">Introduction to root finding</h2>
+
+<div class="figure">
+<p><img src="images/roots.png" alt="roots.png" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org6fb63d9">
+<h3 id="org6fb63d9">A problem example : Bunge jumping  (From Chapra 2012)</h3>
+<p>
+The velocity for a jumper is given as 
+\[
+   v(t) = \sqrt{\frac{gm}{c_d}} \tanh \left( {\sqrt{\frac{gc_d}{m}}t} \right) .
+   \]
+You need to find the critical mass \(m\) such us the speed does not
+exceed \(v = 36\) m/s after \(t = 4\) s, for \(c_d = 0.25\) kg/m. How to
+do it? 
+</p>
+
+<p class="fragment (roll-in)">
+Start by defining a new function, \(f(m)\), such us 
+\[
+   f(m) = \sqrt{\frac{gm}{c_d}} \tanh \left( {\sqrt{\frac{gc_d}{m}}t}
+   \right) - v(t).
+   \]
+Now your problem is to find the root of the function \(f(m)\)
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orga6acd58">
+<h3 id="orga6acd58">Graphical method</h3>
+<p>
+The first approach is to plot the function \(f(m)\) and find the root
+graphically. The following snippet shows you how to do that
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-python"><span style="color: #F0DFAF; font-weight: bold;">import</span> numpy <span style="color: #F0DFAF; font-weight: bold;">as</span> np
+<span style="color: #F0DFAF; font-weight: bold;">import</span> matplotlib.pyplot <span style="color: #F0DFAF; font-weight: bold;">as</span> plt
+<span style="color: #F0DFAF; font-weight: bold;">import</span> seaborn <span style="color: #F0DFAF; font-weight: bold;">as</span> sns <span style="color: #5F7F5F;"># </span><span style="color: #7F9F7F;">this improves the figures aesthetics</span>
+
+<span style="color: #F0DFAF; font-weight: bold;">from</span> matplotlib <span style="color: #F0DFAF; font-weight: bold;">import</span> rc
+rc(<span style="color: #CC9393;">'text'</span>, usetex=<span style="color: #BFEBBF;">True</span>) <span style="color: #5F7F5F;"># </span><span style="color: #7F9F7F;">use latex rendering</span>
+
+sns.<span style="color: #DCDCCC; font-weight: bold;">set</span>() <span style="color: #5F7F5F;"># </span><span style="color: #7F9F7F;">activate seaborn</span>
+sns.set_context(<span style="color: #CC9393;">"talk"</span>) <span style="color: #5F7F5F;"># </span><span style="color: #7F9F7F;">increase fonts and imporove look for a talk</span>
+
+<span style="color: #DFAF8F;">cd</span> = 0.25
+<span style="color: #DFAF8F;">g</span> = 9.81
+<span style="color: #DFAF8F;">v</span> = 36
+<span style="color: #DFAF8F;">t</span> = 4
+
+<span style="color: #DFAF8F;">m</span> = np.linspace(50, 200, 100) <span style="color: #5F7F5F;"># </span><span style="color: #7F9F7F;">100 points between 50 an 200</span>
+<span style="color: #DFAF8F;">fm</span> = np.sqrt(g*m/cd)*np.tanh(np.sqrt(g*cd/m)*t) - v
+
+<span style="color: #DFAF8F;">fig</span>, <span style="color: #DFAF8F;">ax</span> = plt.subplots()
+ax.plot(m, fm)
+ax.set_xlabel(r<span style="color: #CC9393;">"$m$[kg]"</span>)
+ax.set_ylabel(r<span style="color: #CC9393;">"$f(m)$"</span>)
+fig.savefig(<span style="color: #CC9393;">"images/fm.png"</span>, dpi=300, bbox_inches=<span style="color: #CC9393;">'tight'</span>)
+</pre>
+</div>
+
+</section>
+<section >
+
+<div class="figure">
+<p><img src="images/fm.png" alt="fm.png" />
+</p>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd6bc6a9">
+<h3 id="orgd6bc6a9">Exercise</h3>
+<p>
+Plot the function on your computer and find the value
+for the mass. How much is \(f(m)\) for that value?
+</p>
+
+<p>
+Do you think this graphical approach is useful?
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org399573f">
+<h2 id="org399573f">Bracketing methods</h2>
+<div class="column"  style="float:left; width: 70%">
+<p>
+<p>
+<b>General characteristics</b>
+</p>
+</p>
+<ul>
+<li>This methods require that you define an interval where to find the
+root.</li>
+
+<li>There could be single or multiple roots, or no root at all.</li>
+
+<li>The initial guess for the interval limits are such the root is
+included.</li>
+
+<li>The convergence is slow but sometimes guaranteed.</li>
+
+</ul>
+</div>
+<div class="column"  style="float:left; width: 20%">
+
+<div class="figure">
+<p><img src="images/brackets-roots.png" alt="brackets-roots.png" style="border:1px solid black;" /> 
+</p>
+</div>
+</div>
+
+
+</section>
+</section>
+<section>
+<section id="slide-orgbe06a87">
+<h3 id="orgbe06a87">Bisection</h3>
+
+<div class="figure">
+<p><img src="images/bisect-example.png" alt="bisect-example.png" />
+</p>
+</div>
+
+<p>
+For a single root, one has 
+\[
+   f(x_l) f(x_u) < 0 .
+   \]
+Therefore, starting from \(x_l\) and \(x_u\) one can refine them until
+the interval is very small. 
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org612d144">
+<h4 id="org612d144">Pseudo-code</h4>
+<ol>
+<li class="fragment roll-in">Define a given precision \(\epsilon\) and a maximum number of
+iterations \(N\).</li>
+<li class="fragment roll-in">Choose and initial \(x_l\) and \(x_u\). They must include the root
+(\(f(x_l)f(x_u) < 0\)).</li>
+<li class="fragment roll-in">Compute a root estimate \(x_r = \frac{x_l + x_u}{2}\). If \(|f(x_r)|
+     < \epsilon\), stop and return \(x_r\) as root.</li>
+<li class="fragment roll-in">If \(f(x_l)f(x_r) < 0\), then \(x_u = x_r\), else \(x_l = x_r\). Return
+to point 3 until the maximum number of iterations.</li>
+
+</ol>
+</section>
+</section>
+<section>
+<section id="slide-org6ad909b">
+<h4 id="org6ad909b">Graphical description of the bisection method \(x_r = \frac{x_l + x_u}{2}\)</h4>
+
+<div class="figure">
+<p><img src="images/graphical-bisection.png" alt="graphical-bisection.png" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgad90dda">
+<h3 id="orgad90dda">Exercise</h3>
+<p>
+Implement the bisection method and solve the original problem for
+the mass. 
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgee4f8e6">
+<h3 id="orgee4f8e6">False Position</h3>
+
+<div class="figure">
+<p><img src="images/false-position-basic.png" alt="false-position-basic.png" />
+</p>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org4a21250">
+<h4 id="org4a21250">New definition for \(\ x_r\)</h4>
+<p>
+\[
+   x_r = x_u - \frac{f(x_u)(x_l - x_u)}{f(x_l) - f(x_u)}.
+   \]
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgf34372c">
+<h3 id="orgf34372c">Exercise</h3>
+<p>
+Implement the false position method by adapting the bisection
+method (basically just change the computation of \(x_r\)). Compare
+with bisection to find the root of the mass function.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org88ede8b">
+<h3 id="org88ede8b">Exercise</h3>
+<p>
+Determine the positive real root of \(\ln(x^2) = 0.7\), (a)
+graphically, (b) using three iterations of the bisection method,
+with initial guesses of \(x_l = 0.5\) and \(x_u = 2\), and (c) using
+three iterations of the false-position method, with the same
+initial guesses as in (b).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgd6f15bf">
+<h2 id="orgd6f15bf">Open Methods</h2>
+<p class="fragment (t)">
+These methods require only a single starting point or two starting
+points that do not necessarily include the root. 
+</p>
+
+<p class="fragment (t)">
+Generally, when an open method converges, it is usually much faster
+than a bracketing method. 
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org035ace2">
+<h3 id="org035ace2">Fixed point iteration</h3>
+<p>
+The original problem \(f(x) == 0\) is transformed into 
+\[
+   x = g(x).
+   \]
+</p>
+
+<p>
+Then you make an initial guess for the root, \(x = x_0\), and you
+iterate as 
+\(x_{i+1} = g(x_i)\). 
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org1000200">
+<h3 id="org1000200">Exercise</h3>
+<p>
+For the function \(f(x) = e^{-x} - x\) use the iteration method
+(either manually or by using a program), starting from \(x_0 = 0.0\)
+and performing 11 iterations. Fill/print the following data
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">iteration</th>
+<th scope="col" class="org-left">\(x_i\)</th>
+<th scope="col" class="org-left">\(f(x_i)\)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-right">\(\vdots\)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-right">10</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section>
+<section id="slide-org4f2db0f">
+<h3 id="org4f2db0f">Exercise</h3>
+<p>
+Compute the root of the mass function using the fixed-point method.
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org89e4c0f">
+<h3 id="org89e4c0f">Newton-Raphson</h3>
+<p>
+The Newton-Rapshon methods are a huge family of very powerful
+methods employing for both scalar and vectorial non-linear
+equations. For 1D, the simple derivation is based on the estimation
+of a slope. 
+</p>
+
+<div class="column" style="float:left; width: 50%">
+
+<div class="figure">
+<p><img src="images/nr-basic.png" alt="nr-basic.png" width="600" style="border:2px solid black;" /> 
+</p>
+</div>
+</div>
+<div class="column"  style="float:left; width: 50%">
+<p>
+\[
+   f'(x_i)= \frac{f(x_i) -0}{x_i - x_{i+1}},
+   \]
+\[
+   x_{i+1} = x_i - \frac{f(x_i)}{f'(x_i)}. 
+   \]
+As you can see, this is also an <b>iterative method</b>. 
+</p>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org87d5615">
+<h3 id="org87d5615">Exercise</h3>
+<p>
+Implement the Newton-Raphson method to find the root of the mass
+function and for the function \(e^{-x} - x\). 
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orga3b1f27">
+<h3 id="orga3b1f27">Other methods:</h3>
+<p>
+There are other methods, much more elaborated, like the secant
+method, Brent's method, Higher order Newton-Raphson formulas,
+etc. Implementing those methods  in a numerically stable and
+efficient way could take a lot of time, so for now it is much
+better to use the scientific python library.  
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org6eecb41">
+<h2 id="org6eecb41">Using <code>Scipy</code> for one- and multi-dimensional equations</h2>
+<p>
+<code>Scipy</code> offers you the <code>root</code> method to compute the root for a
+(system) of equations very efficiently. Please go and red the doc at
+<a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.root.html">Scipy root function doc</a> . This work both for a single or a system of
+equations. 
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org264fd21">
+<h3 id="org264fd21">Scalar equation</h3>
+<p>
+The following snippet solves the previous example using the <code>root</code>
+method:
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-python"><span style="color: #F0DFAF; font-weight: bold;">from</span> scipy <span style="color: #F0DFAF; font-weight: bold;">import</span> optimize
+<span style="color: #F0DFAF; font-weight: bold;">import</span> numpy <span style="color: #F0DFAF; font-weight: bold;">as</span> np
+
+<span style="color: #F0DFAF; font-weight: bold;">def</span> <span style="color: #93E0E3;">fun</span>(x):
+    <span style="color: #F0DFAF; font-weight: bold;">return</span> np.exp(-x) -x
+
+<span style="color: #DFAF8F;">sol</span> = optimize.root(fun, [0],  method=<span style="color: #CC9393;">'hybr'</span>)
+<span style="color: #F0DFAF; font-weight: bold;">print</span>(<span style="color: #CC9393;">"Solution: "</span>, sol.x)
+<span style="color: #F0DFAF; font-weight: bold;">print</span>(<span style="color: #CC9393;">"f(x): "</span>, fun(sol.x[0]))
+<span style="color: #F0DFAF; font-weight: bold;">print</span>(sol)
+</pre>
+</div>
+
+<pre class="example">
+  Solution:  [0.56714329]
+  f(x):  0.0
+      fjac: array([[-1.]])
+       fun: array([0.])
+   message: 'The solution converged.'
+      nfev: 8
+       qtf: array([-3.30757643e-12])
+	 r: array([1.56714333])
+    status: 1
+   success: True
+	 x: array([0.56714329])
+</pre>
+
+</section>
+</section>
+<section>
+<section id="slide-org9dc4b59">
+<h3 id="org9dc4b59">Multidimensional equation (you can also use <code>fsolve</code>)</h3>
+<div class="org-src-container">
+
+<pre  class="src src-python"><span style="color: #F0DFAF; font-weight: bold;">from</span> scipy <span style="color: #F0DFAF; font-weight: bold;">import</span> optimize
+<span style="color: #F0DFAF; font-weight: bold;">import</span> numpy <span style="color: #F0DFAF; font-weight: bold;">as</span> np
+
+<span style="color: #5F7F5F;"># </span><span style="color: #7F9F7F;">x is a list (x[0] = x, x[1] = y)</span>
+<span style="color: #F0DFAF; font-weight: bold;">def</span> <span style="color: #93E0E3;">fun</span>(x):
+    <span style="color: #F0DFAF; font-weight: bold;">return</span> [x[0]  + 0.5 * (x[0] - x[1])**3 - 1.0, 0.5 * (x[1] - x[0])**3 + x[1]]
+
+<span style="color: #DFAF8F;">sol</span> = optimize.root(fun, [0, 0],  method=<span style="color: #CC9393;">'hybr'</span>)
+<span style="color: #F0DFAF; font-weight: bold;">print</span>(<span style="color: #CC9393;">"Solution: "</span>, sol.x)
+<span style="color: #F0DFAF; font-weight: bold;">print</span>(<span style="color: #CC9393;">"f(x): "</span>, fun(sol.x))
+<span style="color: #F0DFAF; font-weight: bold;">print</span>(sol)
+
+</pre>
+</div>
+
+<pre class="example">
+   Solution:  [0.8411639 0.1588361]
+   f(x):  [-1.1102230246251565e-16, 0.0]
+       fjac: array([[-0.89914291,  0.43765515],
+	  [-0.43765515, -0.89914291]])
+	fun: array([-1.11022302e-16,  0.00000000e+00])
+    message: 'The solution converged.'
+       nfev: 12
+	qtf: array([ 1.19565972e-11, -4.12770392e-12])
+	  r: array([-2.16690469,  1.03701789, -1.10605417])
+     status: 1
+    success: True
+	  x: array([0.8411639, 0.1588361])
+</pre>
+
+</section>
+</section>
+<section>
+<section id="slide-org70542b9">
+<h2 id="org70542b9">Exercises</h2>
+<div class="outline-text-2" id="text-org70542b9">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgfbe9863">
+<h3 id="orgfbe9863">Scalar functions</h3>
+<p>
+Compute the root for the following scalar functions:
+</p>
+<ul>
+<li>\(f(x) = \sin(\sqrt{x}) - x\), \(x_0 = 0.5\)</li>
+<li>\(f(x) = x^3 -6x^2 +11x - 6.1\), \(x_0 = 3.5\)</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org3b2e80c">
+<h3 id="org3b2e80c">The bungee jumping again</h3>
+<p>
+Plot the critical mass as a function of the coefficient \(c_d \in
+   {0.1, 0.15, 0.2, 0.25, 0.3, \ldots, 0.9}\), such us the speed is \(v
+   = 36\) m/s after \(t = 4\) s.
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgc5a4bab">
+<h3 id="orgc5a4bab">Intersection on 3D objects (System of equations)</h3>
+<p>
+<i>Ref: Kiusalaas, Numerical Methods in Engineering with Python 3,
+Example 4.8</i>
+Determine the points of intersection between the circle \(x^2 + y^2
+   = 3\) and the hyperbola \(xy = 1\). Start from  \(x = 0.5, y = 1.5\).
+</p>
+
+<p>
+The solutions are \(\pm(0.618, 1.618)\times 10^{-3}\) and \(\pm(1.618,
+   0.618)\times 10^{-3}\). 
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgc34a571">
+<h3 id="orgc34a571">System of non-linear equations</h3>
+<p>
+<i>Ref: Kiusalaas, Numerical Methods in Engineering with Python 3,
+Example 4.9</i>
+</p>
+
+<p>
+Solve the following non-linear system:
+\[ \sin x + y^2 + \ln z − 7 = 0 \]
+\[3x + 2y − z^3 + 1 = 0\] 
+\[x+y+z−5=0\]
+Starting from   \((1, 1, 1)\). 
+</p>
+
+<p>
+The solution is  \([0.59905376 , 2.3959314 , 2.00501484]\)
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org76e6ca4">
+<h3 id="org76e6ca4">Circle from points</h3>
+<p>
+<i>Ref: Kiusalaas, Numerical Methods in Engineering with Python 3,
+Exercise 4-26</i> 
+The equation of a circle is \((x−a)^2+(y−b)^2 =R^2\) where \(R\) is
+the radius and \((a,b)\) are the coordinates of the center. If the
+coordinates of three points on the circle are 
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">x</td>
+<td class="org-right">8.21</td>
+<td class="org-right">0.34</td>
+<td class="org-right">5.96</td>
+</tr>
+
+<tr>
+<td class="org-left">y</td>
+<td class="org-right">0.00</td>
+<td class="org-right">6.62</td>
+<td class="org-right">−1.12</td>
+</tr>
+</tbody>
+</table>
+<p>
+determine \(R, a, b\)
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgbf1c493">
+<h3 id="orgbf1c493">Multi-function, plot</h3>
+<p>
+Solve the system 
+\[y-x^3 -2x^22 +1=0\] 
+\[y+x^2-1=0\]
+Plot both functions to verify gra[hically that you have found the
+roots. 
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org60a32c6">
+<h3 id="org60a32c6">Continuous covering location model - (Prof. William Guerrero)</h3>
+<ul>
+<li>Encontrar las coordenadas \((x,y)\) de los centros de atención a
+clientes.</li>
+<li>Hay que encontrar coordenadas para \(k\) centros de distribución.</li>
+<li>Las coordenadas del cliente \(j\) estan dadas por las coordenadas
+\((a_j, b_j)\).</li>
+<li>Hay una distancia máxima \(R\) entre los clientes y los centros de
+distribución.</li>
+<li>Resolver el siguiente Sistema de ecuaciones no lineales: Sea
+\(h_{ij}\) la holgura que existe entre la distancia máxima y la
+distancia real (debe ser positiva)</li>
+
+</ul>
+<p>
+\[\sqrt{(x_j - a_i)^2 -  (y_j-b_i)^2} = R - h_{ij}\], \(\forall j, \forall i\).
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org8698117">
+<h3 id="org8698117">Multi-dimensional system</h3>
+<p>
+<i>E. Ward, Numerical Methods, Exercise 3-21</i>
+Consider the nonlinear system
+\[ f (x, y) = x^2 + y^2 − 25 = 0, \]
+\[ g(x, y) = x^2 − y − 2 = 0. \]
+</p>
+
+<p>
+Plot both functions. Compute the solution of the system and
+identify graphically the solution points. 
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgf066a19">
+<h3 id="orgf066a19">Rocket</h3>
+<p>
+The upward velocity of a rocket can be computed by the following
+formula: \(v = u \ln m_0 − gt m_0 −qt\) where \(v =\) upward velocity,
+\(u =\) the velocity at which fuel is expelled relative to the
+rocket, \(m_0 =\) the initial mass of the rocket at time \(t = 0, q =\)
+the fuel consumption rate, and \(g =\) the downward acceleration of
+gravity (assumed constant \(= 9.81\) m/s\(^2\)). If $u = 180$0 m/s,
+\(m_0 = 160,000\) kg, and \(q = 2600\) kg/s, compute the time at which
+\(v = 750\) m/s. (Hint: \(t\) is somewhere between \(10\) and \(50\) s.)
+</p>
+</section>
+</section>
+</div>
+</div>
+<script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
+<script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: true,
+center: true,
+slideNumber: 'c',
+rollingLinks: true,
+keyboard: true,
+overview: true,
+width: 1100,
+height: 900,
+margin: 0.20,
+minScale: 0.50,
+maxScale: 2.50,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>

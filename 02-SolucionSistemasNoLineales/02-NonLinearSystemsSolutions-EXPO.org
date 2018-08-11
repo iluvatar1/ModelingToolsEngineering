@@ -1,0 +1,394 @@
+#    -*- mode: org -*-
+
+#+TITLE: Solution of non-linear equations
+#+AUTHOR: William Oquendo
+#+EMAIL: woquendo@gmail.com
+#+DATE: 
+
+
+* Configuration for reveal                                         :noexport:
+  Based on http://nwidger.github.io/blog/post/making-a-reveal.js-presentation-with-org-reveal/
+#+OPTIONS: reveal_center:t reveal_progress:t reveal_history:t reveal_control:t
+#+OPTIONS: reveal_mathjax:t reveal_rolling_links:t reveal_keyboard:t reveal_overview:t num:nil
+#+OPTIONS: reveal_width:1100 reveal_height:900
+#+OPTIONS: toc:1
+#+OPTIONS: timestamp:nil email:t
+#+REVEAL_MARGIN: 0.2
+#+REVEAL_MIN_SCALE: 0.5
+#+REVEAL_MAX_SCALE: 2.5
+#+REVEAL_TRANS: fade
+# #+REVEAL_TRANS: default, cube, page, concave, zoom, linear, fade or none
+#+REVEAL_THEME: solarized
+# #+REVEAL_THEME: night, black, white, simple, solarized
+#+REVEAL_HLEVEL: 999
+#+REVEAL_EXTRA_CSS: ./presentation.css
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+REVEAL_ROOT: http://cdn.jsdelivr.net/reveal.js/3.0.0/
+#+REVEAL: split
+#+REVEAL_PLUGINS: (markdown notes)
+
+
+* Configuration for org-reftex                                     :noexport:
+#+BIBLIOGRAPHY: biblio plain
+
+
+* Introduction to root finding
+  [[file:images/roots.png]]
+** A problem example : Bunge jumping  (From Chapra 2012)
+   The velocity for a jumper is given as 
+   $$
+   v(t) = \sqrt{\frac{gm}{c_d}} \tanh \left( {\sqrt{\frac{gc_d}{m}}t} \right) .
+   $$
+   You need to find the critical mass $m$ such us the speed does not
+   exceed $v = 36$ m/s after $t = 4$ s, for $c_d = 0.25$ kg/m. How to
+   do it? 
+
+   #+ATTR_REVEAL: :frag (roll-in)
+   Start by defining a new function, $f(m)$, such us 
+   $$
+   f(m) = \sqrt{\frac{gm}{c_d}} \tanh \left( {\sqrt{\frac{gc_d}{m}}t}
+   \right) - v(t).
+   $$
+   Now your problem is to find the root of the function $f(m)$
+
+** Graphical method
+   The first approach is to plot the function $f(m)$ and find the root
+   graphically. The following snippet shows you how to do that
+
+   #+BEGIN_SRC python :exports code :results none
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns # this improves the figures aesthetics
+
+from matplotlib import rc
+rc('text', usetex=True) # use latex rendering
+
+sns.set() # activate seaborn
+sns.set_context("talk") # increase fonts and imporove look for a talk
+
+cd = 0.25
+g = 9.81
+v = 36
+t = 4
+
+m = np.linspace(50, 200, 100) # 100 points between 50 an 200
+fm = np.sqrt(g*m/cd)*np.tanh(np.sqrt(g*cd/m)*t) - v
+
+fig, ax = plt.subplots()
+ax.plot(m, fm)
+ax.set_xlabel(r"$m$[kg]")
+ax.set_ylabel(r"$f(m)$")
+fig.savefig("images/fm.png", dpi=300, bbox_inches='tight')
+   #+END_SRC
+
+   #+RESULTS:
+   : None
+
+   #+REVEAL: split
+   [[file:images/fm.png]]
+
+** Exercise
+   Plot the function on your computer and find the value
+   for the mass. How much is $f(m)$ for that value?
+
+   Do you think this graphical approach is useful?
+
+* Bracketing methods
+  #+REVEAL_HTML: <div class="column"  style="float:left; width: 70%">
+  #+REVEAL_HTML: <p>   
+  *General characteristics*
+  #+REVEAL_HTML: </p>
+  - This methods require that you define an interval where to find the
+    root. 
+
+  - There could be single or multiple roots, or no root at all. 
+
+  - The initial guess for the interval limits are such the root is
+    included. 
+
+  - The convergence is slow but sometimes guaranteed. 
+  #+REVEAL_HTML: </div>
+  #+REVEAL_HTML: <div class="column"  style="float:left; width: 20%">
+  #+ATTR_HTML: :style border:1px solid black;
+  #+ATTR_HTML: :style float:left;
+  [[file:images/brackets-roots.png]] 
+  #+REVEAL_HTML: </div>
+
+
+** Bisection
+   [[file:images/bisect-example.png]]
+
+   For a single root, one has 
+   $$
+   f(x_l) f(x_u) < 0 .
+   $$
+   Therefore, starting from $x_l$ and $x_u$ one can refine them until
+   the interval is very small. 
+*** Pseudo-code
+    #+ATTR_REVEAL: :frag (roll-in)
+    1. Define a given precision $\epsilon$ and a maximum number of
+     iterations $N$. 
+    2. Choose and initial $x_l$ and $x_u$. They must include the root
+     ($f(x_l)f(x_u) < 0$). 
+    3. Compute a root estimate $x_r = \frac{x_l + x_u}{2}$. If $|f(x_r)|
+     < \epsilon$, stop and return $x_r$ as root. 
+    4. If $f(x_l)f(x_r) < 0$, then $x_u = x_r$, else $x_l = x_r$. Return
+     to point 3 until the maximum number of iterations.  
+*** Graphical description of the bisection method $x_r = \frac{x_l + x_u}{2}$
+    [[file:images/graphical-bisection.png]]
+** Exercise 
+   Implement the bisection method and solve the original problem for
+   the mass. 
+   
+** False Position
+   [[file:images/false-position-basic.png]]
+
+*** New definition for $\ x_r$
+   $$
+   x_r = x_u - \frac{f(x_u)(x_l - x_u)}{f(x_l) - f(x_u)}.
+   $$
+** Exercise 
+   Implement the false position method by adapting the bisection
+   method (basically just change the computation of $x_r$). Compare
+   with bisection to find the root of the mass function.
+** Exercise 
+   Determine the positive real root of $\ln(x^2) = 0.7$, (a)
+   graphically, (b) using three iterations of the bisection method,
+   with initial guesses of $x_l = 0.5$ and $x_u = 2$, and (c) using
+   three iterations of the false-position method, with the same
+   initial guesses as in (b).
+* Open Methods
+  #+ATTR_REVEAL: :frag (t)
+  These methods require only a single starting point or two starting
+  points that do not necessarily include the root. 
+
+  #+ATTR_REVEAL: :frag (t)
+  Generally, when an open method converges, it is usually much faster
+  than a bracketing method. 
+** Fixed point iteration
+   The original problem $f(x) == 0$ is transformed into 
+   $$
+   x = g(x).
+   $$
+
+   Then you make an initial guess for the root, $x = x_0$, and you
+   iterate as 
+   $x_{i+1} = g(x_i)$. 
+** Exercise   
+   For the function $f(x) = e^{-x} - x$ use the iteration method
+   (either manually or by using a program), starting from $x_0 = 0.0$
+   and performing 11 iterations. Fill/print the following data
+   | iteration | $x_i$ | $f(x_i)$ |
+   |-----------+-------+----------|
+   |         0 |       |          |
+   |         1 |       |          |
+   |  $\vdots$ |       |          |
+   |        10 |       |          |
+   |-----------+-------+----------|
+** Exercise 
+   Compute the root of the mass function using the fixed-point method.
+
+** Newton-Raphson
+   The Newton-Rapshon methods are a huge family of very powerful
+   methods employing for both scalar and vectorial non-linear
+   equations. For 1D, the simple derivation is based on the estimation
+   of a slope. 
+
+   #+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+   #+ATTR_HTML: :width 600 :style border:2px solid black;
+   [[file:images/nr-basic.png]] 
+   #+REVEAL_HTML: </div>
+   #+REVEAL_HTML: <div class="column"  style="float:left; width: 50%">
+   $$
+   f'(x_i)= \frac{f(x_i) -0}{x_i - x_{i+1}},
+   $$
+   $$
+   x_{i+1} = x_i - \frac{f(x_i)}{f'(x_i)}. 
+   $$
+   As you can see, this is also an *iterative method*. 
+   #+REVEAL_HTML: </div>
+
+** Exercise 
+   Implement the Newton-Raphson method to find the root of the mass
+   function and for the function $e^{-x} - x$. 
+
+** Other methods:
+   There are other methods, much more elaborated, like the secant
+   method, Brent's method, Higher order Newton-Raphson formulas,
+   etc. Implementing those methods  in a numerically stable and
+   efficient way could take a lot of time, so for now it is much
+   better to use the scientific python library.  
+* Using =Scipy= for one- and multi-dimensional equations
+  =Scipy= offers you the =root= method to compute the root for a
+  (system) of equations very efficiently. Please go and red the doc at
+  [[https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.root.html][Scipy root function doc]] . This work both for a single or a system of
+  equations. 
+
+** Scalar equation
+  The following snippet solves the previous example using the =root=
+  method:
+
+  #+BEGIN_SRC python :exports both :results output
+from scipy import optimize
+import numpy as np
+
+def fun(x):
+    return np.exp(-x) -x
+
+sol = optimize.root(fun, [0],  method='hybr')
+print("Solution: ", sol.x)
+print("f(x): ", fun(sol.x[0]))
+print(sol)
+  #+END_SRC
+  
+  #+RESULTS:
+  #+begin_example
+  Solution:  [0.56714329]
+  f(x):  0.0
+      fjac: array([[-1.]])
+       fun: array([0.])
+   message: 'The solution converged.'
+      nfev: 8
+       qtf: array([-3.30757643e-12])
+	 r: array([1.56714333])
+    status: 1
+   success: True
+	 x: array([0.56714329])
+  #+end_example
+
+** Multidimensional equation (you can also use =fsolve=)
+   #+BEGIN_SRC python :exports both :results output
+from scipy import optimize
+import numpy as np
+
+# x is a list (x[0] = x, x[1] = y)
+def fun(x):
+    return [x[0]  + 0.5 * (x[0] - x[1])**3 - 1.0, 0.5 * (x[1] - x[0])**3 + x[1]]
+
+sol = optimize.root(fun, [0, 0],  method='hybr')
+print("Solution: ", sol.x)
+print("f(x): ", fun(sol.x))
+print(sol)
+
+   #+END_SRC
+
+   #+RESULTS:
+   #+begin_example
+   Solution:  [0.8411639 0.1588361]
+   f(x):  [-1.1102230246251565e-16, 0.0]
+       fjac: array([[-0.89914291,  0.43765515],
+	  [-0.43765515, -0.89914291]])
+	fun: array([-1.11022302e-16,  0.00000000e+00])
+    message: 'The solution converged.'
+       nfev: 12
+	qtf: array([ 1.19565972e-11, -4.12770392e-12])
+	  r: array([-2.16690469,  1.03701789, -1.10605417])
+     status: 1
+    success: True
+	  x: array([0.8411639, 0.1588361])
+   #+end_example
+
+* Exercises 
+** Scalar functions
+   Compute the root for the following scalar functions:
+   - $f(x) = \sin(\sqrt{x}) - x$, $x_0 = 0.5$   
+   - $f(x) = x^3 -6x^2 +11x - 6.1$, $x_0 = 3.5$
+** The bungee jumping again
+   Plot the critical mass as a function of the coefficient $c_d \in
+   {0.1, 0.15, 0.2, 0.25, 0.3, \ldots, 0.9}$, such us the speed is $v
+   = 36$ m/s after $t = 4$ s.
+
+** Intersection on 3D objects (System of equations)
+   /Ref: Kiusalaas, Numerical Methods in Engineering with Python 3,
+   Example 4.8/
+   Determine the points of intersection between the circle $x^2 + y^2
+   = 3$ and the hyperbola $xy = 1$. Start from  $x = 0.5, y = 1.5$.
+
+   The solutions are $\pm(0.618, 1.618)\times 10^{-3}$ and $\pm(1.618,
+   0.618)\times 10^{-3}$. 
+** System of non-linear equations 
+   /Ref: Kiusalaas, Numerical Methods in Engineering with Python 3,
+   Example 4.9/
+
+   Solve the following non-linear system:
+   $$ \sin x + y^2 + \ln z − 7 = 0 $$
+   $$3x + 2y − z^3 + 1 = 0$$ 
+   $$x+y+z−5=0$$
+   Starting from   $(1, 1, 1)$. 
+
+   The solution is  $[0.59905376 , 2.3959314 , 2.00501484]$
+** Circle from points
+   /Ref: Kiusalaas, Numerical Methods in Engineering with Python 3,
+   Exercise 4-26/ 
+   The equation of a circle is $(x−a)^2+(y−b)^2 =R^2$ where $R$ is
+   the radius and $(a,b)$ are the coordinates of the center. If the
+   coordinates of three points on the circle are 
+   | x | 8.21 | 0.34 |  5.96 |
+   | y | 0.00 | 6.62 | −1.12 |
+   determine $R, a, b$
+
+** Multi-function, plot
+   Solve the system 
+   $$y-x^3 -2x^22 +1=0$$ 
+   $$y+x^2-1=0$$
+   Plot both functions to verify gra[hically that you have found the
+   roots. 
+** Continuous covering location model - (Prof. William Guerrero)
+   - Encontrar las coordenadas $(x,y)$ de los centros de atención a
+     clientes.  
+   - Hay que encontrar coordenadas para $k$ centros de distribución. 
+   - Las coordenadas del cliente $j$ estan dadas por las coordenadas
+     $(a_j, b_j)$. 
+   - Hay una distancia máxima $R$ entre los clientes y los centros de
+     distribución.  
+   - Resolver el siguiente Sistema de ecuaciones no lineales: Sea
+     $h_{ij}$ la holgura que existe entre la distancia máxima y la
+     distancia real (debe ser positiva) 
+   $$\sqrt{(x_j - a_i)^2 -  (y_j-b_i)^2} = R - h_{ij}, \forall j, \forall i$$.
+
+** Multi-dimensional system
+   /E. Ward, Numerical Methods, Exercise 3-21/
+   Consider the nonlinear system
+   $$ f (x, y) = x^2 + y^2 − 25 = 0, $$
+   $$ g(x, y) = x^2 − y − 2 = 0. $$
+
+   Plot both functions. Compute the solution of the system and
+   identify graphically the solution points. 
+** Rocket
+   The upward velocity of a rocket can be computed by the following
+   formula: $v = u \ln m_0 − gt m_0 −qt$ where $v =$ upward velocity,
+   $u =$ the velocity at which fuel is expelled relative to the
+   rocket, $m_0 =$ the initial mass of the rocket at time $t = 0, q =$
+   the fuel consumption rate, and $g =$ the downward acceleration of
+   gravity (assumed constant $= 9.81$ m/s$^2$). If $u = 180$0 m/s,
+   $m_0 = 160,000$ kg, and $q = 2600$ kg/s, compute the time at which
+   $v = 750$ m/s. (Hint: $t$ is somewhere between $10$ and $50$ s.)
+** Cylinder (6.16)                                                 :noexport:
+   The volume of liquid V in a hollow horizontal cylinder of radius r
+   and length L is related to the depth of the liquid h by 
+   V= r2cos−1 r−h −(r−h) 2rh−h2 L
+   Determine h given r = 2 m, L = 5 m3, and V = 8 m3
+   
+   Plot h as function of $r \in [0.1, 5.6]$. 
+** GPS - GLobal Positioning System                                 :noexport:
+   E. Ward, Exercise 3-41
+   (Global positioning system project) Each time a GPS is used, a
+   system of nonlinear equations of the form $$(x−a_1)^2 +(y−b_1)^2
+   +(z−c_i)^2 =[(C(t_1 −D)]^2$$ $$(x−a_2)^2 +(y−b_2)^2 +(z−c_i)^2
+   =[(C(t_2 −D)]^2$$ $$(x−a_3)^2 +(y−b_3)^2 +(z−c_i)^2 =[(C(t_3
+   −D)]^2$$ $$(x−a_4)^2 +(y−b_4)^2 +(z−c_i)^2 =[(C(t_4 −D)]^2$$ is
+   solved for the $(x, y, z)$ coordinates of the receiver. For each
+   satellite $i$, the locations are $(a_i,b_i,c_i)$, and $t_i$ is the
+   synchronized transmission time from the satellite. Further, $C$ is
+   the speed of light, and $D$ is the difference between the
+   synchronized time of the satellite clocks and the earth-bound
+   receiver clock. While there are only two points on the intersection
+   of three spheres (one of which can be determined to be the desired
+   location), a fourth sphere (satellite) must be used to resolve the
+   inaccuracy in the clock contained in the low-cost receiver on
+   earth. Explore various ways for solving such a nonlinear
+   system. See Hofmann-Wellenhof, Lichtenegger, and Collins [2001],
+   Sauer [2006], and Strang and Borre [1997].
+   
+   
