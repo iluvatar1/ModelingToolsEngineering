@@ -56,7 +56,7 @@
    The first approach is to plot the function $f(m)$ and find the root
    graphically. The following snippet shows you how to do that
 
-   #+BEGIN_SRC python :exports code :results none
+   #+BEGIN_SRC python :exports code :results output
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns # this improves the figures aesthetics
@@ -219,11 +219,12 @@ fig.savefig("images/fm.png", dpi=300, bbox_inches='tight')
    etc. Implementing those methods  in a numerically stable and
    efficient way could take a lot of time, so for now it is much
    better to use the scientific python library.  
-* Using =Scipy= for one- and multi-dimensional equations
+* Using =Scipy root= for one- and multi-dimensional equations
   =Scipy= offers you the =root= method to compute the root for a
   (system) of equations very efficiently. Please go and red the doc at
   [[https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.root.html][Scipy root function doc]] . This work both for a single or a system of
-  equations. 
+  equations. Actually the root method belongs to a more general
+  optimization module (see [[https://docs.scipy.org/doc/scipy/reference/optimize.html][=optimize= docs]]). 
 
 ** Scalar equation
   The following snippet solves the previous example using the =root=
@@ -289,6 +290,58 @@ print(sol)
 	  x: array([0.8411639, 0.1588361])
    #+end_example
 
+* Using =Sympy= to find all roots
+  [[http://docs.sympy.org/latest/index.html][SymPy]] is a Python library for symbolic mathematics. among this, it
+  includes solvers to solve systems of equations finding *all
+  roots*. For modern versions, use the function =solveset=.  
+  #+REVEAL_HTML: <div class="column"  style="float:left; width: 60%">
+  #+NAME: sympy1
+  #+BEGIN_SRC python :exports both :results output
+import sympy as sym
+x, y, z = sym.symbols('x y z')
+res = sym.solveset(x**2-1, x)
+print(res)
+  #+END_SRC
+  #+REVEAL_HTML: </div>
+  #+REVEAL_HTML: <div class="column"  style="float:left; width: 40%">
+  #+RESULTS: sympy1
+  : {-1, 1}
+  #+REVEAL_HTML: </div>
+
+  #+REVEAL_HTML: <div class="column"  style="float:left; width: 60%">
+  #+NAME: sympy2
+  #+BEGIN_SRC python :exports both :results output 
+import sympy as sym
+x= sym.symbols('x')
+res = sym.solveset((x+2)*(x-1)*(x-2), x)
+print(res)
+  #+END_SRC
+
+  #+REVEAL_HTML: </div>
+  #+REVEAL_HTML: <div class="column"  style="float:left; width: 40%">
+  #+RESULTS: sympy2
+  : {-2, 1, 2}
+  #+REVEAL_HTML: </div>
+*** Non-linear equations with =sympy=
+    See the solvers [[http://docs.sympy.org/latest/tutorial/solvers.html][documentation]] .
+    #+BEGIN_SRC python :exports both :results output
+import sympy as sym
+a, b, c, d = sym.symbols('a, b, c, d', real=True)
+res = sym.nonlinsolve([a**2 + a, a - b], [a, b])
+print(res)
+x, y= sym.symbols('x y')
+res = sym.nonlinsolve([x*y - 1, x - 2], x, y)
+print(res)
+res = sym.nonlinsolve([x**2 + 1, y**2 + 1], [x, y])
+print(res)
+    #+END_SRC
+
+    #+RESULTS:
+    : {(-1, -1), (0, 0)}
+    : {(2, 1/2)}
+    : {(-I, -I), (-I, I), (I, -I), (I, I)}
+
+* Using =numpy roots= for polinomials                              :noexport:
 * Exercises 
 ** Scalar functions
    Compute the root for the following scalar functions:
@@ -319,7 +372,7 @@ print(sol)
 
    Solve the following non-linear system:
    $$ \sin x + y^2 + \ln z − 7 = 0 $$
-   $$3x + 2y − z^3 + 1 = 0$$ 
+   $$3x + 2^y − z^3 + 1 = 0$$ 
    $$x+y+z−5=0$$
    Starting from   $(1, 1, 1)$. 
 
