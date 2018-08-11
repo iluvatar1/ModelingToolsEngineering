@@ -420,7 +420,7 @@ print(res)
    $u =$ the velocity at which fuel is expelled relative to the
    rocket, $m_0 =$ the initial mass of the rocket at time $t = 0, q =$
    the fuel consumption rate, and $g =$ the downward acceleration of
-   gravity (assumed constant $= 9.81$ m/s$^2$). If $u = 180$0 m/s,
+   gravity (assumed constant $= 9.81$ m/s$^2$). If $u = 1800$ m/s,
    $m_0 = 160,000$ kg, and $q = 2600$ kg/s, compute the time at which
    $v = 750$ m/s. (Hint: $t$ is somewhere between $10$ and $50$ s.)
 ** Cylinder (6.16)                                                 :noexport:
