@@ -364,8 +364,8 @@ print(res)
    Determine the points of intersection between the circle $x^2 + y^2
    = 3$ and the hyperbola $xy = 1$. Start from  $x = 0.5, y = 1.5$.
 
-   The solutions are $\pm(0.618, 1.618)\times 10^{-3}$ and $\pm(1.618,
-   0.618)\times 10^{-3}$. 
+   The solutions are $\pm(0.618, 1.618)$ and $\pm(1.618,
+   0.618)$. 
 ** System of non-linear equations 
    /Ref: Kiusalaas, Numerical Methods in Engineering with Python 3,
    Example 4.9/
@@ -393,7 +393,7 @@ print(res)
 
 ** Multi-function, plot
    Solve the system 
-   $$y-x^3 -2x^22 +1=0$$ 
+   $$y-x^3 -2x^{22} +1=0$$ 
    $$y+x^2-1=0$$
    Plot both functions to verify graphically that you have found the
    roots. 
