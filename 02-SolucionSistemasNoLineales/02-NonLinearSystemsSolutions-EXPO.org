@@ -377,6 +377,10 @@ print(res)
    Starting from   $(1, 1, 1)$. 
 
    The solution is  $[0.59905376 , 2.3959314 , 2.00501484]$
+
+   *Note:* If you solve this using =sympy=, you will find that there
+    are infinite solutions. 
+
 ** Circle from points
    /Ref: Kiusalaas, Numerical Methods in Engineering with Python 3,
    Exercise 4-26/ 
@@ -391,7 +395,7 @@ print(res)
    Solve the system 
    $$y-x^3 -2x^22 +1=0$$ 
    $$y+x^2-1=0$$
-   Plot both functions to verify gra[hically that you have found the
+   Plot both functions to verify graphically that you have found the
    roots. 
 ** Continuous covering location model - (Prof. William Guerrero)
    - Encontrar las coordenadas $(x,y)$ de los centros de atención a
