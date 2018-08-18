@@ -3,3 +3,6 @@ reveal.js*
 *MiguelUr*
 *biblio.el*
 *WilliamOquendo*
+*.bbl
+*.tex
+*.el
