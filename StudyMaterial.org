@@ -1,8 +1,8 @@
 #+INCLUDE: ~/latex/org-html-readtheorg-theme.org
 #+INCLUDE: ~/latex/org-latex-preamble.org
 
-#+TITLE: Granulometry influence in 3D
-#+AUTHOR: William Oquendo and Nicolas Estrada
+#+TITLE: Python extra material
+#+AUTHOR: William Oquendo 
 #+EMAIL: woquendo@gmail.com
 #+OPTIONS: html-postamble:nil 
 #+OPTIONS: tex:t
