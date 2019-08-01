@@ -6,3 +6,4 @@ reveal.js*
 *.bbl
 *.tex
 *.el
+*DS_Store
