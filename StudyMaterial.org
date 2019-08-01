@@ -6,10 +6,11 @@
 #+EMAIL: woquendo@gmail.com
 #+OPTIONS: html-postamble:nil 
 #+OPTIONS: tex:t
+#+DATE: 
 
 Cordial saludo,
 
-algunos me han pedido material extra para aprender más de Python como
+Este es un material extra para aprender más de Python como
 lenguaje de programación. Esto porque nuestro curso usa python pero no
 es un curso de programación. Además de algunos ejercicios extra de
 práctica de lo visto. A continuación detallo algunos materiales.
