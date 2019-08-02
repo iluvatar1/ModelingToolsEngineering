@@ -1,4 +1,4 @@
-name: rise-environment
+name: scientific-python
 channels:
   - damianavila82
   - conda-forge
@@ -9,4 +9,5 @@ dependencies:
   - pandas
   - bokeh
   - rise
-    
+  - scipy
+  - seaborn
