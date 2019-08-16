@@ -22,6 +22,8 @@
 # I want to evaluate them interactively and retain the original results.
 #+PROPERTY: header-args :eval export
 
+
+
 * Beamer configuration                                             :noexport:
 ** Basic
 # this triggers loading the beamer menu (C-c C-b) when the file is read
@@ -130,19 +132,27 @@
 # #+LATEX_HEADER: \bibliography{biblio.bib}
 
 * Linear Systems and Matrices
-**  Example : Bungee-jumping family plan \cite{chapra2012AppliedNumericalMethods} :B_fullframe:
+**  Example : Some applications \cite{chapra2012AppliedNumericalMethods} :B_fullframe:
    :PROPERTIES:
    # :BEAMER_OPT: standout,label=
    :BEAMER_env: fullframe
    :END:
    #+LATEX: \vfill
    #+BEGIN_CENTER
-   #+attr_latex: :width 1.0\textwidth :float t :placement [H] :center
-   [[file:fig/bungee-family-01.pdf]]
+   # [[file:fig/bungee-family-01.pdf]]
+   #+BEAMER: \only<1> {
+   #+attr_latex: :width 0.9\textwidth :float t :placement [H] :center
+   [[file:fig/Linear-Systems-Applications.pdf]]
+   #+BEAMER: }
+   #+BEAMER: \only<2> {
+   3Brown1Blue channel
+   #+attr_latex: :width 0.9\textwidth :float t :placement [H] :center
+   [[file:fig/Matrices-rotations-eigenvalues.png]]
+   #+BEAMER: }
    #+END_CENTER
    #+LATEX: \vfill
    
-**  Example : System of equations                               :B_fullframe:
+**  Example : System of equations                      :B_fullframe:noexport:
    :PROPERTIES:
    # :BEAMER_OPT: standout,label=
    :BEAMER_act: [<+->]
@@ -220,7 +230,7 @@ print(a)
 a = np.array([1, 2, 3, 4]).reshape(2,2)
 print(a)
     #+END_SRC
-    #+LATEX: {\small
+    #+BEAMER: {\tiny
     #+RESULTS:
     : [[1 2]
     :  [3 4]]
@@ -228,7 +238,7 @@ print(a)
     :  [3 4]]
     : [[1 2]
     :  [3 4]]
-    #+LATEX:}
+    #+BEAMER:}
 *** See [[http://docs.sympy.org/latest/modules/matrices/matrices.html][sympy docs]]
     :PROPERTIES:
     :BEAMER_col: 0.48
@@ -243,7 +253,7 @@ print(eye(4))
 print(M[0, 2])
     #+END_SRC
 
-    #+LATEX: {\small
+    #+LATEX: {\tiny
     #+RESULTS:
     : Matrix([[1, 0, 4], [0, 0, 0]])
     : Matrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
@@ -541,6 +551,8 @@ print("Verification: ", A.dot(sol[1][:, 0]) - sol[0][0]*sol[1][:, 0])
    #+attr_latex: :width 1.0\textwidth :float t :placement [H] :center
    [[file:fig/problem-02.pdf]]
    #+latex: \vfill
+
+
 
 * Acknowledgments                                                
   :PROPERTIES:
