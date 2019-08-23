@@ -6,8 +6,11 @@ dependencies:
   - python
   - numpy
   - matplotlib
-  - pandas
-  - bokeh
+  ..
+     - pandas
+     - bokeh
   - rise
   - scipy
   - seaborn
+  - ipywidgets
+  - jupyter_contrib_nbextensions
