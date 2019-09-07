@@ -11,3 +11,5 @@ dependencies:
   - seaborn
   - ipywidgets
   - jupyter_contrib_nbextensions
+  - ipyvolume
+    
