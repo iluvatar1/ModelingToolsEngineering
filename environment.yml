@@ -12,4 +12,5 @@ dependencies:
   - ipywidgets
   - jupyter_contrib_nbextensions
   - ipyvolume
-    
+  - fenics
+  - mshr
