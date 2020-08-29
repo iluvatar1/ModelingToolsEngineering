@@ -4,22 +4,8 @@ python tools for Numerical Calculus in Engineering.
 Mybinder execution:
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/iluvatar1/ModelingToolsEngineering/master)
 
-https://mybinder.org/v2/gh/iluvatar1/ModelingToolsEngineering/master
+* Python extra Study Material
 
-https://jupyter4edu.github.io/jupyter-edu-book/
-https://github.com/binder-examples/jupyter-rise
-https://ihavenotv.com/a-moment-in-the-sun-the-terrestrial-planets-the-planets-2019
-
-Cronograma: https://docs.google.com/spreadsheets/d/1TTTEMVdmg1rLCPhadEusICVi8fyKhiE3zNRHB6qZDq8/edit?usp=sharing
-
-* Tools
-** Presentations in org reveal
-    http://nwidger.github.io/blog/post/making-a-reveal.js-presentation-with-org-reveal/
-
-* Mybinder
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/iluvatar1/ModelingToolsEngineering/master)
-
-* Study Material
 Cordial saludo,
 
 Este es un material extra para aprender más de Python como
