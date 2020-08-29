@@ -1,1 +1,1 @@
-~/miniconda3/bin/jt -r
+jt -r
