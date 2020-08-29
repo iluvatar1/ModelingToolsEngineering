@@ -1,6 +1,5 @@
-name: scientific-python
+name: mdgp-python
 channels:
-  - damianavila82
   - conda-forge
 dependencies:
   - python
