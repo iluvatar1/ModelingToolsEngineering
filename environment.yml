@@ -5,12 +5,13 @@ dependencies:
   - python
   - numpy
   - matplotlib
-#  - rise
-#  - scipy
-#  - seaborn
-#  - ipywidgets
-#  - jupyter_contrib_nbextensions
-#  - ipyvolume
-#  - fenics
-#  - mshr
-#  - pulp
+  - rise
+  - scipy
+  - seaborn
+  - ipywidgets
+  - jupyter_contrib_nbextensions
+  - ipyvolume
+  - fenics
+  - mshr
+  - pandas
+  - pulp
