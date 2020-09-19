@@ -13,3 +13,4 @@ dependencies:
   - ipyvolume
   - fenics
   - mshr
+  - pulp
