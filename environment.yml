@@ -1,6 +1,7 @@
 name: mdgp-python
 channels:
   - conda-forge
+  - defaults
 dependencies:
   - python
   - numpy
