@@ -2,18 +2,18 @@ name: mdgp-python
 channels:
   - conda-forge
 dependencies:
-  - python=3.9.0
+  - python=3.9.7
   - numpy
   - matplotlib
   - fenics
   - superlu_dist=6.2.0
-# - rise
-# - scipy
-# - seaborn
-# - ipywidgets
-# - jupyter_contrib_nbextensions
-# - mshr
-#  - pandas
-#  - pulp
-#  - bokeh
-#  - ipyvolume
+  - rise
+  - scipy
+  - seaborn
+  - ipywidgets
+  - jupyter_contrib_nbextensions
+  - mshr
+  - pandas
+  - pulp
+  - bokeh
+  - ipyvolume
